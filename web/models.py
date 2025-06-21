@@ -37,3 +37,13 @@ class test_user_yn_answer(models.Model):
     yes_no = models.ForeignKey(test_yes_no, on_delete=CASCADE)
     answer = models.BooleanField()
     user = models.ForeignKey(User, on_delete=CASCADE)
+    
+class test_exam_report(models.Model):
+    exam = models.ForeignKey(Exam, on_delete=CASCADE)
+    report = models.TextField()
+    date = models.DateField()
+
+class test_category_report(models.Model):
+    category = models.ForeignKey(test_category, on_delete=CASCADE)
+    report = models.TextField()
+    date = models.DateField()
