@@ -1,21 +1,34 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 # Create your models here.
+class Custom_User(AbstractUser):
+    nickname = models.CharField(max_length=15)
+    bio = models.TextField(blank=True)
+    PreferdCategories = models.ManyToManyField(TestCategory, blank=True)
+    isVerifeid = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return "{self.nickname}"
 
 class TestCategory(models.Model):
-    User = models.ForeignKey(User, on_delete=CASCADE)
     Category = models.CharField(max_length=25)
+    
+    def __str__(self):
+        return "{self.Category}"
 
 class TestPrompt(models.Model):
-    Category = models.ForeignKey(test_category, on_delete=CASCADE)
+    User = User
+    Category = models.ForeignKey(TestCategory, on_delete=CASCADE)
     PromptText = models.CharField(max_length=2048)
     TypeofPrompt = models.IntegerField() #1 for 4option, 2 for yes/no
-    isPublic = models.BooleanField()
+    isPublic = models.BooleanField(default=False)
     Date = models.DateField()
 
 class FourOptionTest(models.Model):
-    Prompt = models.ForeignKey(test_prompt, on_delete=CASCADE)
+    Prompt = models.ForeignKey(TestPrompt, on_delete=CASCADE)
     Question = models.CharField(max_length=50)
     option_a = models.CharField(max_length=30)
     option_b = models.CharField(max_length=30)
@@ -24,26 +37,26 @@ class FourOptionTest(models.Model):
     CorrectOption = models.IntegerField() #1 for a, 2 for b,..., 4 for c
 
 class YesNoTest(models.Model):
-    Prompt = models.ForeignKey(test_prompt, on_delete=CASCADE)
+    Prompt = models.ForeignKey(TestPrompt, on_delete=CASCADE)
     Question = models.CharField(max_length=50)
     CorrectOption = models.BooleanField()
 
 class UserFourOptionTestAnswer(models.Model):
-    FourOption = models.ForeignKey(test_4option, on_delete=CASCADE)
+    FourOption = models.ForeignKey(FourOptionTest, on_delete=CASCADE)
     Answer = models.IntegerField()
     User = models.ForeignKey(User, on_delete=CASCADE)
 
-class test_user_yn_answer(models.Model):
-    yes_no = models.ForeignKey(test_yes_no, on_delete=CASCADE)
-    answer = models.BooleanField()
-    user = models.ForeignKey(User, on_delete=CASCADE)
+class UserYesNoTestAnswer(models.Model):
+    YesNo = models.ForeignKey(YesNoTest, on_delete=CASCADE)
+    Answer = models.BooleanField()
+    User = models.ForeignKey(User, on_delete=CASCADE)
     
 class TestExamReport(models.Model):
-    Exam = models.ForeignKey(Exam, on_delete=CASCADE)
+    Exam = models.ForeignKey(TestPrompt, on_delete=CASCADE)
     Report = models.TextField()
     Date = models.DateField()
 
 class TestCategoryReport(models.Model):
-    Category = models.ForeignKey(test_category, on_delete=CASCADE)
+    Category = models.ForeignKey(Category, on_delete=CASCADE)
     Report = models.TextField()
     Date = models.DateField()
