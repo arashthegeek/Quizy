@@ -1,17 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
+from django.db.models import CASCADE
 
-User = get_user_model()
+
 # Create your models here.
 class Custom_User(AbstractUser):
     nickname = models.CharField(max_length=15)
     bio = models.TextField(blank=True)
-    PreferdCategories = models.ManyToManyField(TestCategory, blank=True)
+    PreferdCategories = models.ManyToManyField('TestCategory', blank=True)
     isVerifeid = models.BooleanField(default=False)
     
     def __str__(self):
         return "{self.nickname}"
+
+User = get_user_model()
 
 class TestCategory(models.Model):
     Category = models.CharField(max_length=25)
@@ -57,6 +60,6 @@ class TestExamReport(models.Model):
     Date = models.DateField()
 
 class TestCategoryReport(models.Model):
-    Category = models.ForeignKey(Category, on_delete=CASCADE)
+    Category = models.ForeignKey(TestCategory, on_delete=CASCADE)
     Report = models.TextField()
     Date = models.DateField()
