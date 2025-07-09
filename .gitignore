@@ -160,6 +160,8 @@ dmypy.json
 
 # pytype static type analyzer
 .pytype/
+__pycache__/
+*.pyc
 
 # Cython debug symbols
 cython_debug/
