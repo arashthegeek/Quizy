@@ -10,7 +10,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 def quastiontojson(quastion):
     driver = webdriver.Firefox()
 
-    ai_url = "https://huggingface.co/deepseek-ai/DeepSeek-V3-0324"
+    ai_url = "https://huggingface.co/openai/gpt-oss-120b"
     driver.get(ai_url)
     sleep(0.2)
     cookie = {"name":"token","value":"FEAACHTfmatvqmPtAkwgcKoVYgMGuVnSAIfHVvJDDenZhUoOuUtEAHcmXyCcKaWZIuHazghdllTizQNBlalWHuziDaVpwqwIQbCDSlDSCgXdBZWWavRusMsyiSoAvRhN","domain":"huggingface.co"}
